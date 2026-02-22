@@ -1,0 +1,20 @@
+# Build stage
+FROM node:20-alpine AS build
+
+WORKDIR /app
+
+# Install dependencies
+COPY package*.json ./
+RUN npm ci
+
+# Copy source and build
+COPY . .
+# Ensure VITE_API_BASE_URL is set at build time to /api for the reverse proxy
+ENV VITE_API_BASE_URL=/api
+RUN npm run build
+
+# Production stage — just the static files
+FROM alpine:latest
+WORKDIR /app
+COPY --from=build /app/dist /app/dist
+CMD ["sh", "-c", "cp -r /app/dist/* /dist/"]

@@ -1,0 +1,39 @@
+# Clearpath RAG Chatbot — Backend Dependencies
+# Pinned versions per Section 9.1 of ARCHITECTURE.md
+
+# Web framework
+fastapi==0.115.6
+uvicorn==0.34.0
+python-multipart==0.0.18
+
+# Streaming
+sse-starlette==2.2.1
+
+# LLM API
+groq==0.15.0
+
+# PDF parsing
+PyMuPDF==1.24.14
+
+# Vector store
+faiss-cpu==1.13.2
+
+# Embeddings
+sentence-transformers==3.3.1
+
+# Data validation
+pydantic==2.10.4
+pydantic-settings==2.7.0
+
+# Environment variables
+python-dotenv==1.0.1
+
+# HTTP client (used for Groq health check)
+httpx==0.28.1
+
+# Utilities
+numpy==1.26.4
+
+# Testing
+pytest==8.3.4
+pytest-asyncio==0.25.0
