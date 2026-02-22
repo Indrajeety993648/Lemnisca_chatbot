@@ -17,6 +17,7 @@ RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/wh
 
 # Copy application source
 COPY backend/ /app/backend/
+COPY scripts/ /app/scripts/
 COPY .env.example /app/.env.example
 
 # Create data directories
