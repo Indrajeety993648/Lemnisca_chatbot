@@ -1,4 +1,6 @@
-# Clearpath RAG Chatbot
+# Lemnisca Clearpath RAG Chatbot
+
+**Live Demo:** [http://65.1.114.237/](http://65.1.114.237/)
 
 A RAG-based customer support chatbot powered by FAISS vector search, Groq LLMs, and a deterministic query router. Built with FastAPI (backend) and React + TypeScript (frontend).
 

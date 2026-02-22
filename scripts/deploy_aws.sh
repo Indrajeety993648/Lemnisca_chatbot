@@ -41,10 +41,16 @@ fi
 
 # 4. Build and start production containers
 echo "🏗️ Building and starting containers..."
-docker compose -f docker-compose.prod.yml up --build -d
+# Clean up existing stack and volumes to ensure a fresh start
+docker compose -f docker-compose.prod.yml down -v --remove-orphans
+docker compose -f docker-compose.prod.yml up --build --force-recreate -d
+
+# Wait for backend to be ready
+echo "⏳ Waiting for backend to initialize (model download may take a moment)..."
+sleep 10
 
 echo "----------------------------------------------------"
 echo "🎉 Deployment Successful!"
 echo "Your chatbot is now running."
-echo "Public IP: $(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)"
+echo "Public IP: $EC2_IP"
 echo "----------------------------------------------------"
