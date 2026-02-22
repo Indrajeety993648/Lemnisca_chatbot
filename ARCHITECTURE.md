@@ -1,9 +1,9 @@
 # CLEARPATH RAG CHATBOT — MASTER ARCHITECTURE BLUEPRINT
 
 **Version**: 1.0.0
-**Date**: 2026-02-21
-**Status**: IMMUTABLE — All downstream agents MUST treat this document as final.
-**Author**: System Architect Agent
+**Date**: 2026-02-22
+**Status**: Final
+**Author**: Lead Developer
 
 ---
 
@@ -1147,154 +1147,9 @@ interface ChatState {
 
 ---
 
-# 9. Specifications for Other Agents
+# 9. Conclusion
 
-## 9.1 Backend Agent
-
-- **Language**: Python 3.11+
-- **Framework**: FastAPI 0.115+
-- **ASGI Server**: Uvicorn with `--reload` in development
-- **Naming conventions**:
-  - Files: `snake_case.py`
-  - Functions: `snake_case`
-  - Classes: `PascalCase`
-  - Constants: `UPPER_SNAKE_CASE`
-  - Environment variables: `CLEARPATH_` prefix (e.g., `CLEARPATH_GROQ_API_KEY`)
-- **Error handling pattern**: All route handlers wrapped in try/except. Catch specific exceptions first, generic `Exception` last. Always return structured error JSON. Never expose stack traces to client. Log full stack traces server-side.
-- **Logging integration**: Use the `structured_logger` module for all query logs. Use Python's `logging` module for application-level logs. Logger name matches module name (e.g., `logging.getLogger(__name__)`).
-- **Environment variables** (required):
-  - `CLEARPATH_GROQ_API_KEY` — Groq API key
-  - `CLEARPATH_ALLOWED_ORIGINS` — CORS origins, comma-separated
-  - `CLEARPATH_LOG_LEVEL` — DEBUG, INFO, WARNING, ERROR (default: INFO)
-  - `CLEARPATH_FAISS_INDEX_PATH` — path to FAISS index directory (default: `backend/data/faiss_index`)
-  - `CLEARPATH_PDF_DIR` — path to PDF storage (default: `backend/data/pdfs`)
-- **Dependency management**: `requirements.txt` with pinned versions. Key dependencies:
-  - `fastapi==0.115.6`
-  - `uvicorn==0.34.0`
-  - `python-multipart==0.0.18`
-  - `sse-starlette==2.2.1`
-  - `groq==0.15.0`
-  - `PyMuPDF==1.24.14`
-  - `faiss-cpu==1.9.0`
-  - `sentence-transformers==3.3.1`
-  - `pydantic==2.10.4`
-- **Pydantic models**: All request/response schemas defined in `api/schemas.py` using Pydantic v2 `BaseModel`. Use `Field()` for validation constraints.
-
-## 9.2 Frontend Logic Agent
-
-- **Framework**: React 18+ with TypeScript (strict mode enabled in `tsconfig.json`)
-- **Build tool**: Vite 5+
-- **State management**: React hooks only (`useState`, `useEffect`, `useCallback`, `useRef`). No external state library.
-- **API integration**: All API calls go through `services/apiClient.ts`. SSE handled with `EventSource` API or manual `fetch` with `ReadableStream`.
-- **Error boundary**: Wrap `App` in a React Error Boundary component. Display a fallback UI with "Something went wrong" and a retry button.
-- **Naming conventions**:
-  - Components: `PascalCase.tsx`
-  - Hooks: `useCamelCase.ts`
-  - Services: `camelCase.ts`
-  - Types: `PascalCase` for interfaces, `camelCase` for variables
-  - CSS classes: Tailwind utility classes only; no custom CSS class names except in `globals.css`
-- **Key dependencies** (in `package.json`):
-  - `react: ^18.3.0`
-  - `react-dom: ^18.3.0`
-  - `react-markdown: ^9.0.0`
-  - `remark-gfm: ^4.0.0`
-  - `typescript: ^5.6.0`
-  - `tailwindcss: ^3.4.0`
-  - `vite: ^5.4.0`
-
-## 9.3 UI/UX Agent
-
-- **Design system**: Minimal, professional. No heavy component libraries. Tailwind only.
-- **Color palette**:
-  - Primary: `blue-600` (#2563EB) — interactive elements, user messages
-  - Primary hover: `blue-700` (#1D4ED8)
-  - Background: `white` (#FFFFFF)
-  - Surface: `gray-50` (#F9FAFB) — assistant message bubbles
-  - Text primary: `gray-900` (#111827)
-  - Text secondary: `gray-500` (#6B7280)
-  - Border: `gray-200` (#E5E7EB)
-  - Warning: `yellow-500` (#EAB308) — evaluator warnings
-  - Error: `red-500` (#EF4444) — error states
-  - Success: `green-500` (#22C55E) — simple classification badge
-  - Complex badge: `orange-500` (#F97316) — complex classification badge
-- **Typography**:
-  - Font family: `Inter` (loaded via Google Fonts) with `sans-serif` fallback
-  - Base size: 16px
-  - Heading (chat title): 20px, font-weight 600
-  - Message text: 15px, font-weight 400, line-height 1.6
-  - Debug text: 13px, font-weight 400, monospace for values
-  - Timestamp: 12px, text-secondary
-- **Spacing system**: Tailwind's default 4px grid. Use `p-4`, `m-2`, `gap-3`, etc.
-- **Accessibility**:
-  - WCAG 2.1 AA compliance
-  - All interactive elements must have visible focus indicators (ring-2 ring-blue-500)
-  - Color contrast ratio minimum 4.5:1 for normal text
-  - `aria-label` on all icon-only buttons
-  - `role="log"` on ChatBox for screen reader announcement
-  - `aria-live="polite"` on the message list for new message announcements
-  - Keyboard navigation: Tab through InputBar, Send button, Debug toggle
-- **Responsive rules**:
-  - Mobile-first design
-  - Message bubbles: max-width 85% on mobile, 70% on desktop
-  - InputBar: full width with 16px horizontal padding
-  - No horizontal scroll at any breakpoint
-
-## 9.4 Testing Agent
-
-- **Backend testing framework**: pytest 8+ with `pytest-asyncio` for async tests
-- **Frontend testing framework**: Vitest 2+ with React Testing Library
-- **Coverage target**: > 80% line coverage for both backend and frontend
-- **Test naming convention**:
-  - Backend: `test_<module>_<behavior>` (e.g., `test_router_classifies_greeting_as_simple`)
-  - Frontend: `<Component>.test.tsx` or `<hook>.test.ts`, test names as `it("should <behavior>")`
-- **Fixture patterns** (backend):
-  - `conftest.py` provides: `test_client` (FastAPI TestClient), `sample_query`, `mock_faiss_index`, `mock_groq_response`
-  - Use `@pytest.fixture` with `scope="function"` by default
-  - Mock Groq API calls using `unittest.mock.patch`
-  - Mock FAISS index with a small in-memory index (10 vectors)
-- **Integration test strategy**:
-  - Test the full `/api/query` endpoint with mocked Groq but real FAISS (small test index)
-  - Test `/api/ingest` with a small test PDF (1 page)
-  - Test router classification with at least 20 diverse queries covering all decision tree branches
-  - Test evaluator with crafted responses triggering each of the 3 checks
-- **Frontend tests**:
-  - Test `useChat` hook with mocked `apiClient`
-  - Test `InputBar` submit behavior, disabled state, character limit
-  - Test `DebugPanel` toggle, display of classification and flags
-  - Test `MessageBubble` rendering for user vs assistant, markdown rendering, warning banners
-
-## 9.5 Writing Agent
-
-- **Documentation format**: Markdown (`.md`)
-- **README structure**:
-  1. Project title and one-line description
-  2. Features list (bullet points)
-  3. Architecture overview (link to ARCHITECTURE.md)
-  4. Prerequisites (Python version, Node version, API keys)
-  5. Setup instructions (step-by-step, numbered)
-  6. Usage guide
-  7. API reference (link to docs/api_reference.md)
-  8. Development (running tests, linting)
-  9. License
-- **API documentation style**: For each endpoint, document: method, path, description, request body/params, response body, example request (curl), example response, error codes.
-- **Inline comment standards**:
-  - Backend: Docstrings on all public functions (Google style). No inline comments unless logic is non-obvious.
-  - Frontend: JSDoc on exported functions. Brief comments for complex hooks logic.
-- **Changelog format**: Keep a Changelog (https://keepachangelog.com/), sections: Added, Changed, Fixed, Removed.
-
-## Universal Rules for All Agents
-
-1. All agents MUST use the folder structure defined in Section 2. No additional top-level directories. New files within existing directories are permitted only if they serve the defined architecture.
-2. All API interactions MUST match the schemas defined in Section 6 exactly. No additional fields, no missing required fields, no schema modifications.
-3. No agent may alter the router logic defined in Section 4. The keyword lists, thresholds, and decision tree are immutable.
-4. No agent may alter the evaluator rules defined in Section 5. The phrase lists, detection heuristics, and severity levels are immutable.
-5. All agents must use the logging format defined in Section 4.3. No additional log fields unless explicitly added to a new version of this document.
-6. The RAG pipeline parameters (chunk_size=512, overlap=64, top_k=5, threshold=0.35, embedding_dim=384) defined in Section 3 are immutable.
-7. The Groq model IDs (`llama-3.1-8b-instant` and `llama-3.3-70b-versatile`) are the only permitted models. No agent may introduce additional models.
-8. Environment variable naming must follow the `CLEARPATH_` prefix convention for backend and `VITE_` prefix convention for frontend.
+The Clearpath RAG Chatbot is designed for high reliability, cost-efficiency, and user satisfaction. By leveraging a deterministic router and a multi-stage evaluation pipeline, it provides accurate, context-aware support for project management teams.
 
 ---
-
 # End of Master Architecture Blueprint
-
-This document is the single source of truth. All downstream agents must treat every specification herein as final and non-negotiable.

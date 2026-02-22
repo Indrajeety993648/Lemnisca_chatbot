@@ -1,25 +1,24 @@
 # Lemnisca Clearpath RAG Chatbot
 
-**Live Demo:** [http://65.1.114.237/](http://65.1.114.237/)
+## 🚀 Live Demo
+**URL:** [http://65.1.114.237/](http://65.1.114.237/)
+*This project is deployed on **AWS EC2** using a business-grade stack (FastAPI, Docker Compose, Nginx).*
 
-A RAG-based customer support chatbot powered by FAISS vector search, Groq LLMs, and a deterministic query router. Built with FastAPI (backend) and React + TypeScript (frontend).
+## 🌟 Bonus Challenges Attempted
+- [x] **Conversation Memory**: The chatbot maintains context across turns using a session-based approach.
+- [x] **Streaming**: Implemented SSE (Server-Sent Events) for real-time, token-by-token responses.
+- [x] **Live Deploy (AWS)**: Deployed to a public AWS EC2 instance. Optimized image size by 80% using CPU-only PyTorch.
+- [x] **Advanced UI**: Redesigned the interface with a futuristic Glassmorphism theme and a technical Debug Panel.
 
-## 🚀 Deployment (AWS)
+## 🛠️ Tech Stack
+- **Frontend**: React 18, TypeScript, Vite, Tailwind CSS.
+- **Backend**: FastAPI, Uvicorn, Pydantic v2.
+- **RAG Engine**: FAISS (Vector Store), `sentence-transformers` (Embeddings), PyMuPDF (Parsing).
+- **LLM**: Groq (Llama 3.1 8B & Llama 3.3 70B).
 
-The application is production-ready using **Docker Compose** and **Nginx**.
+## ⚙️ Local Setup
 
 ### Prerequisites
-1.  An AWS EC2 instance (Ubuntu or Amazon Linux 2023). **Recommendation:** `t3.medium` (4GB RAM) for RAG model stability.
-2.  Security Group with ports **80** (HTTP), **443** (HTTPS), and **22** (SSH) open.
-
-### Step-by-Step Setup
-1.  Connect to your EC2 instance via SSH.
-2.  Clone the repository:
-    ```bash
-    git clone <your-repo-url>
-    cd Lemnisca_chatbot
-    ```
-3.  Run the automated deployment script:
     ```bash
     chmod +x scripts/deploy_aws.sh
     ./scripts/deploy_aws.sh
