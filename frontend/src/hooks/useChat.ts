@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { postQuery, ApiError } from "../services/apiClient";
-import type { ChatState, DebugInfo, Message } from "../types";
+import type { ChatState, Message } from "../types";
 
 function generateId(): string {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
