@@ -34,7 +34,7 @@ CLEARPATH_LOG_LEVEL=INFO
 CLEARPATH_FAISS_INDEX_PATH=backend/data/faiss_index
 CLEARPATH_PDF_DIR=backend/data/pdfs/clearpath_docs
 CLEARPATH_LOG_FILE_PATH=backend/data/logs/queries.jsonl
-VITE_API_BASE_URL=/api
+VITE_API_BASE_URL=
 EOF
     echo "✅ .env file created."
 fi

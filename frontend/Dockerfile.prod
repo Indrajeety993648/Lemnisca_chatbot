@@ -9,8 +9,9 @@ RUN npm ci
 
 # Copy source and build
 COPY . .
-# Ensure VITE_API_BASE_URL is set at build time to /api for the reverse proxy
-ENV VITE_API_BASE_URL=/api
+# Ensure VITE_API_BASE_URL is set at build time to empty string for the reverse proxy
+# The apiClient.ts already appends /api to all requests
+ENV VITE_API_BASE_URL=
 RUN npm run build
 
 # Production stage — just the static files
