@@ -74,8 +74,12 @@ I would implement a **Document Summarization Index**. Creating a separate FAISS 
 
 ## AI Usage
 **Prompt 1**: "Build a RAG chatbot using FastAPI and React. Use FAISS for vector search and Groq for the LLM."
+
 **Prompt 2**: "Help me design a deterministic query router that decides between two models without using an LLM."
+
 **Prompt 3**: "Implement a 3-check evaluator for RAG outputs: No-context, Refusal, and Hallucination-risk."
+
 **Prompt 4**: "Redesign My UI to look like a premium AI Companion using dark mode and glassmorphism. preserving my theme color and robotic sense"
+
 **Prompt 5**: "Deployed My project on AWS EC2 using docker compose but getting issue while querying, I checked network tab on inspect and found the api endpoint have wrong path, it should be http://localhost:8000/api/chat but it is showing http://localhost:5173/api/api/chat , what will be possible issue ? "
 
